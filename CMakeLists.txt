@@ -7,10 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(SOURCE_FILES src/main.cpp
     src/Cell.cpp src/Cell.hpp
     src/Grid.cpp src/Grid.hpp
-    Errors.hpp
-    ImageBuffer.hpp
-    Pixel.hpp
-    Point.hpp
+    src/Errors.hpp
+    src/ImageBuffer.hpp
+    src/Pixel.hpp
+    src/Point.hpp
 )
 
 add_executable(${PROJECT_NAME})
