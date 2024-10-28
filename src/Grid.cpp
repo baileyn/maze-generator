@@ -5,11 +5,11 @@
 
 Grid::Grid(size_t width, size_t height) : m_width{width}, m_height{height}, m_cells(width * height)
 {
-    for (size_t y = 0; y < height; y++)
+    for (size_t y = 0; y < m_height; y++)
     {
-        for (size_t x = 0; x < width; x++)
+        for (size_t x = 0; x < m_width; x++)
         {
-            m_cells[y * width + x] = new Cell{this, x, y};
+            m_cells[y * m_width + x] = new Cell{this, x, y};
         }
     }
 }

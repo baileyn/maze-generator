@@ -13,6 +13,16 @@ class Game
     {
     }
 
+    [[nodiscard]] int width() const
+    {
+        return m_width;
+    }
+
+    [[nodiscard]] int height() const
+    {
+        return m_height;
+    }
+
     virtual void setup()
     {
     }
@@ -33,4 +43,6 @@ class Game
 
   private:
     std::unique_ptr<Window> m_window{};
+    int m_width{};
+    int m_height{};
 };
