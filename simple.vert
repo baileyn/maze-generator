@@ -6,11 +6,11 @@ layout(location = 1) in vec3 aColor; // Vertex color attribute
 out vec3 vertexColor; // Output color to the fragment shader
 
 // View matrix
-// uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
-    gl_Position = vec4(aPos, 0.0, 1.0); // Set the position of the vertex
+    gl_Position = projection * vec4(aPos, 0.0, 1.0); // Set the position of the vertex
     vertexColor = aColor; // Pass the color to the fragment shader
 }
 

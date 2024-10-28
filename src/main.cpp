@@ -4,6 +4,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 
 #include <filesystem>
@@ -24,9 +25,14 @@ class MazeGame : public Game
         m_shader->addShader("../../../../simple.frag", GL_FRAGMENT_SHADER);
         m_shader->link();
 
-        std::vector<Vertex> vertices = {{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-                                        {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-                                        {{0.0f, 0.5f}, {0.0f, 0.0f, 1.0f}}};
+        m_projection = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f);
+
+        m_shader->use();
+        m_shader->setUniform("projection", m_projection);
+
+        std::vector<Vertex> vertices = {{{0.0f, 400.0f}, {1.0f, 0.0f, 0.0f}},
+                                        {{300.0f, 400.0f}, {0.0f, 1.0f, 0.0f}},
+                                        {{400.0f, 100.0f}, {0.0f, 0.0f, 1.0f}}};
 
         glClearColor(0.2f, 0.4f, 0.8f, 1.0f);
 
@@ -64,6 +70,7 @@ class MazeGame : public Game
   private:
     GLuint m_vao{};
     GLuint m_vbo{};
+    glm::mat4 m_projection{};
 
     std::unique_ptr<ShaderProgram> m_shader{};
 };

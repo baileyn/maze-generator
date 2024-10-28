@@ -24,6 +24,16 @@ class ShaderProgram
         glUseProgram(m_id);
     }
 
+    void setUniform(const std::string &name, int value)
+    {
+        glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
+    }
+
+    void setUniform(const std::string &name, const glm::mat4 &value)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, &value[0][0]);
+    }
+
   private:
     ShaderProgram(const ShaderProgram &) = delete;
     ShaderProgram(ShaderProgram &&) = delete;
