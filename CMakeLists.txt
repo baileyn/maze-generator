@@ -13,11 +13,13 @@ set(SOURCE_FILES src/main.cpp
     src/Point.hpp
 
     src/Window.cpp src/Window.hpp
+    src/Game.cpp src/Game.hpp
     src/Shader.hpp
 )
 
 add_executable(${PROJECT_NAME})
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
+target_compile_definitions(${PROJECT_NAME} PRIVATE GLFW_INCLUDE_NONE)
 
 find_package(SPNG CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:spng::spng>,spng::spng,spng::spng_static>)

@@ -1,6 +1,7 @@
 #include "Window.hpp"
 #include "Logging.hpp"
 
+#include <glad/glad.h>
 #include <iostream>
 
 Window::Window(std::string_view title, int width, int height)
@@ -26,6 +27,13 @@ Window::Window(std::string_view title, int width, int height)
     }
 
     glfwMakeContextCurrent(m_window.get());
+
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+    {
+        LOG_ERROR("Failed to initialize GLAD");
+        glfwTerminate();
+        throw std::runtime_error("Failed to initialize GLAD");
+    }
 }
 
 Window::~Window()
