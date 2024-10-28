@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.29 FATAL_ERROR)
 project(maze)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES src/main.cpp
@@ -12,6 +12,7 @@ set(SOURCE_FILES src/main.cpp
     src/Pixel.hpp
     src/Point.hpp
 
+    src/Window.cpp src/Window.hpp
     src/Shader.hpp
 )
 
