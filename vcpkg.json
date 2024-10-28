@@ -1,5 +1,9 @@
 {
     "dependencies": [
-        "libspng"
+        "libspng",
+        "glm",
+        "glfw3",
+        "glad",
+        "spdlog"
     ]
 }

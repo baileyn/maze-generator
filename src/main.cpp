@@ -1,7 +1,13 @@
+#define GLFW_INCLUDE_NONE
+
 #include "Cell.hpp"
 #include "Grid.hpp"
 #include "ImageBuffer.hpp"
 #include "Pixel.hpp"
+
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <spdlog/spdlog.h>
 
 constexpr size_t SQUARE_SIZE = 20;
 constexpr size_t GRID_WIDTH = 100;
@@ -54,21 +60,61 @@ void drawCell(ImageBuffer<Pixel<uint8_t>> &buffer, Cell *cell)
 
 int main(int argc, char **argv)
 {
-    Grid grid{GRID_WIDTH, GRID_HEIGHT};
-    grid.generate();
-
-    ImageBuffer<Pixel<uint8_t>> buffer{SQUARE_SIZE * GRID_WIDTH, SQUARE_SIZE * GRID_HEIGHT};
-    buffer.fill(0xFF);
-
-    for (size_t y = 0; y < GRID_HEIGHT; y++)
+    if (!glfwInit())
     {
-        for (size_t x = 0; x < GRID_WIDTH; x++)
-        {
-            drawCell(buffer, grid.get(x, y));
-        }
+        spdlog::error("Failed to initialize GLFW");
+        return EXIT_FAILURE;
     }
 
-    buffer.save_to_file("test.png");
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE); // This setting is required for Mac compatibility
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Maze Generator", nullptr, nullptr);
+    if (!window)
+    {
+        spdlog::error("Failed to create window");
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        spdlog::error("Failed to initialize GLAD");
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
+
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glfwPollEvents();
+        glfwSwapBuffers(window);
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    // Grid grid{GRID_WIDTH, GRID_HEIGHT};
+    // grid.generate();
+
+    // ImageBuffer<Pixel<uint8_t>> buffer{SQUARE_SIZE * GRID_WIDTH, SQUARE_SIZE * GRID_HEIGHT};
+    // buffer.fill(0xFF);
+
+    // for (size_t y = 0; y < GRID_HEIGHT; y++)
+    // {
+    //     for (size_t x = 0; x < GRID_WIDTH; x++)
+    //     {
+    //         drawCell(buffer, grid.get(x, y));
+    //     }
+    // }
+
+    // buffer.save_to_file("test.png");
 
     return EXIT_SUCCESS;
 }
