@@ -5,8 +5,12 @@
 #include "ImageBuffer.hpp"
 #include "Pixel.hpp"
 
+#include "Shader.hpp"
+
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <spdlog/spdlog.h>
 
 constexpr size_t SQUARE_SIZE = 20;
@@ -58,6 +62,30 @@ void drawCell(ImageBuffer<Pixel<uint8_t>> &buffer, Cell *cell)
     }
 }
 
+// Turn ImageBuffer into an OpenGL texture
+GLuint convertImageBufferToTexture(ImageBuffer<Pixel<uint8_t>> &buffer)
+{
+    GLuint texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, buffer.width(), buffer.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    return texture;
+}
+
+struct Vertex
+{
+    glm::vec2 position;
+    glm::vec3 color;
+};
+
 int main(int argc, char **argv)
 {
     if (!glfwInit())
@@ -89,13 +117,57 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    Shader shader("../simple.vert", "../simple.frag");
+
+    glm::mat4 view = glm::ortho(0.0f, 800.0f, 600.0f, 0.0f, -1.0f, 1.0f);
+    shader.setMat4("view", view);
+
+    // Define vertices for a 2D triangle
+    Vertex vertices[] = {
+        // positions        // colors
+        {{400.0f, 100.0f}, {1.0f, 0.0f, 0.0f}}, // top
+        {{300.0f, 500.0f}, {0.0f, 1.0f, 0.0f}}, // bottom left
+        {{500.0f, 500.0f}, {0.0f, 0.0f, 1.0f}}  // bottom right
+    };
+
+    // Create VAO and VBO
+    GLuint VAO, VBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    // Bind VAO
+    glBindVertexArray(VAO);
+
+    // Bind VBO and upload vertex data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Define vertex attributes
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+
+    glClearColor(0.2f, 0.4, 0.8f, 1.0f);
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.use();
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
+
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
+
+    // Cleanup
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
 
     glfwDestroyWindow(window);
     glfwTerminate();

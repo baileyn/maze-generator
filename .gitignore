@@ -1,5 +1,6 @@
 /.cache/
 /build/
+/out/
 /vcpkg_installed/
 .DS_Store
 vcpkg-manifest-install.log

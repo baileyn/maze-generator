@@ -11,6 +11,8 @@ set(SOURCE_FILES src/main.cpp
     src/ImageBuffer.hpp
     src/Pixel.hpp
     src/Point.hpp
+
+    src/Shader.hpp
 )
 
 add_executable(${PROJECT_NAME})

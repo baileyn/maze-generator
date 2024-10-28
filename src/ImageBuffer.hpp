@@ -27,6 +27,26 @@ template <typename T> class ImageBuffer
     }
 
     /**
+     * @brief Returns the width of the image buffer.
+     *
+     * @return The width of the image buffer.
+     */
+    [[nodiscard]] size_t width() const
+    {
+        return m_width;
+    }
+
+    /**
+     * @brief Returns the height of the image buffer.
+     *
+     * @return The height of the image buffer.
+     */
+    [[nodiscard]] size_t height() const
+    {
+        return m_height;
+    }
+
+    /**
      * @brief Returns a pointer to the underlying data array.
      *
      * @return Pointer to the first element of the data array.
