@@ -14,7 +14,7 @@ set(SOURCE_FILES src/main.cpp
 
     src/Window.cpp src/Window.hpp
     src/Game.cpp src/Game.hpp
-    src/Shader.hpp
+    src/ShaderProgram.cpp src/ShaderProgram.hpp
 )
 
 add_executable(${PROJECT_NAME})
