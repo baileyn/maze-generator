@@ -107,6 +107,14 @@ class Grid
   public:
     Grid(int width, int height) : m_width{width}, m_height{height}
     {
+        reset();
+    }
+
+    void reset()
+    {
+        m_start = randomGridPosition();
+        m_end = randomGridPosition();
+
         m_cells.resize(m_width * m_height);
 
         for (int y = 0; y < m_height; ++y)
@@ -144,6 +152,24 @@ class Grid
                 }
             }
         }
+    }
+
+    glm::vec2 randomGridPosition()
+    {
+        std::uniform_int_distribution<int> distX(0, m_width - 1);
+        std::uniform_int_distribution<int> distY(0, m_height - 1);
+
+        return {distX(rng), distY(rng)};
+    }
+
+    glm::vec2 start() const
+    {
+        return m_start;
+    }
+
+    glm::vec2 end() const
+    {
+        return m_end;
     }
 
     void generate()
@@ -255,6 +281,8 @@ class Grid
     std::mt19937 rng{std::random_device{}()};
 
     Pz::Mesh::MeshPtr m_mesh{};
+    glm::vec2 m_start{};
+    glm::vec2 m_end{};
 };
 
 class Player
@@ -263,6 +291,16 @@ class Player
     Player()
     {
         generateMesh();
+    }
+
+    glm::vec3 position() const
+    {
+        return m_position;
+    }
+
+    void setPosition(glm::vec2 position)
+    {
+        m_position = {position.x, position.y, 0.0f};
     }
 
     void update(Direction direction)
@@ -313,7 +351,7 @@ class Player
 class ExampleGame : public Pz::Core::Game
 {
   public:
-    ExampleGame() : Pz::Core::Game("Example Game", WIDTH * GRID_SIZE, HEIGHT * GRID_SIZE)
+    ExampleGame() : Pz::Core::Game("Maze Game", 800, 800)
     {
     }
 
@@ -322,6 +360,16 @@ class ExampleGame : public Pz::Core::Game
     {
         m_grid.generate();
         m_player = std::make_shared<Player>();
+        m_player->setPosition(m_grid.start());
+
+        Pz::Mesh::MeshBuilder builder{};
+        builder.addVertex({{0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        builder.addVertex({{0.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        builder.addVertex({{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        builder.addVertex({{1.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        builder.addVertex({{0.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        builder.addVertex({{1.0f, 1.0f, 0.0f}, {1.0f, 0.0f, 0.0f}});
+        end = builder.build();
 
         program = std::make_shared<Pz::Shader::Program>();
         program->attachShader("assets/shaders/simple.vert", GL_VERTEX_SHADER);
@@ -339,27 +387,78 @@ class ExampleGame : public Pz::Core::Game
 
     void update() override
     {
+        if (keyboard()->isJustPressed(GLFW_KEY_SPACE))
+        {
+            m_grid.reset();
+            m_grid.generate();
+            m_player->setPosition(m_grid.start());
+        }
+
+        bool valid = false;
+        auto position = m_player->position();
+
         if (keyboard()->isJustPressed(GLFW_KEY_RIGHT))
         {
-            m_player->update(Direction::RIGHT);
+
+            if (position.x < WIDTH - 1)
+            {
+                auto cell = m_grid.getCell(position.x, position.y);
+                valid = !cell->hasWall(Direction::RIGHT);
+            }
+
+            if (valid)
+            {
+                m_player->update(Direction::RIGHT);
+            }
         }
         else if (keyboard()->isJustPressed(GLFW_KEY_LEFT))
         {
-            m_player->update(Direction::LEFT);
+            if (position.x > 0)
+            {
+                auto cell = m_grid.getCell(position.x, position.y);
+                valid = !cell->hasWall(Direction::LEFT);
+            }
+
+            if (valid)
+            {
+                m_player->update(Direction::LEFT);
+            }
         }
         else if (keyboard()->isJustPressed(GLFW_KEY_UP))
         {
-            m_player->update(Direction::UP);
+            if (position.y > 0)
+            {
+                auto cell = m_grid.getCell(position.x, position.y);
+                valid = !cell->hasWall(Direction::UP);
+            }
+
+            if (valid)
+            {
+                m_player->update(Direction::UP);
+            }
         }
         else if (keyboard()->isJustPressed(GLFW_KEY_DOWN))
         {
-            m_player->update(Direction::DOWN);
+            if (position.y < HEIGHT - 1)
+            {
+                auto cell = m_grid.getCell(position.x, position.y);
+                valid = !cell->hasWall(Direction::DOWN);
+            }
+
+            if (valid)
+            {
+                m_player->update(Direction::DOWN);
+            }
         }
     }
 
     void render() override
     {
         glClear(GL_COLOR_BUFFER_BIT);
+
+        program->use();
+        program->setUniform("model", glm::translate(glm::mat4(1.0f), glm::vec3{m_grid.end().x, m_grid.end().y, 0.0f}));
+        end->draw();
 
         m_grid.render(program);
         m_player->render(program);
@@ -368,7 +467,7 @@ class ExampleGame : public Pz::Core::Game
   private:
     std::shared_ptr<Player> m_player{};
 
-    Pz::Mesh::MeshPtr triangle{nullptr};
+    Pz::Mesh::MeshPtr end{nullptr};
     Pz::Shader::ProgramPtr program{nullptr};
 
     glm::mat4 projection{};
