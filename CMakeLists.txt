@@ -6,8 +6,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES src/main.cpp
     src/Pz/UI/Window.hpp src/Pz/UI/Window.cpp
+
     src/Pz/Core/Game.hpp src/Pz/Core/Game.cpp
     src/Pz/Core/Logging.hpp src/Pz/Core/Logging.cpp
+
+    src/Pz/Mesh/Mesh.hpp src/Pz/Mesh/Mesh.cpp
+    src/Pz/Mesh/MeshBuilder.hpp src/Pz/Mesh/MeshBuilder.cpp
 )
 
 add_executable(${PROJECT_NAME})
