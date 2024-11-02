@@ -1,5 +1,4 @@
 #include "Game.hpp"
-#include "Logging.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -7,31 +6,27 @@ namespace Pz::Core
 {
 
 Game::Game(std::string_view title, int width, int height)
-    : window(title, width, height), m_width(width), m_height(height)
+    : m_window(title, width, height), m_width(width), m_height(height)
 {
+    m_keyboard = std::make_shared<Keyboard>(m_window);
 }
 
 void Game::run()
 {
-    PZ_CORE_TRACE("Initializing Game");
     init();
 
-    while (!window.shouldClose())
+    while (!m_window.shouldClose())
     {
-        PZ_CORE_TRACE("Polling events");
+        m_keyboard->update();
+
         glfwPollEvents();
 
-        PZ_CORE_TRACE("Updating game");
         update();
-
-        PZ_CORE_TRACE("Rendering game");
         render();
 
-        PZ_CORE_TRACE("Swapping buffers");
-        window.swapBuffers();
+        m_window.swapBuffers();
     }
 
-    PZ_CORE_TRACE("Cleaning up resources");
     cleanup();
 }
 

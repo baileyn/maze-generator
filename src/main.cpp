@@ -265,8 +265,23 @@ class Player
         generateMesh();
     }
 
-    void update()
+    void update(Direction direction)
     {
+        switch (direction)
+        {
+        case Direction::UP:
+            m_position.y -= 1.0f;
+            break;
+        case Direction::RIGHT:
+            m_position.x += 1.0f;
+            break;
+        case Direction::DOWN:
+            m_position.y += 1.0f;
+            break;
+        case Direction::LEFT:
+            m_position.x -= 1.0f;
+            break;
+        }
     }
 
     void render(Pz::Shader::ProgramPtr &program)
@@ -320,6 +335,26 @@ class ExampleGame : public Pz::Core::Game
         program->setUniform("projection", projection);
 
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    void update() override
+    {
+        if (keyboard()->isJustPressed(GLFW_KEY_RIGHT))
+        {
+            m_player->update(Direction::RIGHT);
+        }
+        else if (keyboard()->isJustPressed(GLFW_KEY_LEFT))
+        {
+            m_player->update(Direction::LEFT);
+        }
+        else if (keyboard()->isJustPressed(GLFW_KEY_UP))
+        {
+            m_player->update(Direction::UP);
+        }
+        else if (keyboard()->isJustPressed(GLFW_KEY_DOWN))
+        {
+            m_player->update(Direction::DOWN);
+        }
     }
 
     void render() override

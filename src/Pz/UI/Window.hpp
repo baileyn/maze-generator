@@ -28,6 +28,11 @@ class Window
         glfwSwapBuffers(m_window.get());
     }
 
+    GLFWwindow *get() const
+    {
+        return m_window.get();
+    }
+
   private:
     Window(Window const &) = delete;
     Window &operator=(Window const &) = delete;

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../UI/Window.hpp"
+#include "Keyboard.hpp"
 
 #include <glad/glad.h>
+#include <memory>
 #include <spdlog/cfg/argv.h>
 #include <spdlog/spdlog.h>
 #include <string_view>
@@ -28,6 +30,11 @@ class Game
         return m_height;
     }
 
+    std::shared_ptr<Keyboard> keyboard() const
+    {
+        return m_keyboard;
+    }
+
   private:
     virtual void init()
     {
@@ -44,7 +51,8 @@ class Game
     }
 
   private:
-    Pz::UI::Window window;
+    Pz::UI::Window m_window;
+    std::shared_ptr<Keyboard> m_keyboard;
 
     float m_width{};
     float m_height{};

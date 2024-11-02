@@ -9,6 +9,7 @@ set(SOURCE_FILES src/main.cpp
 
     src/Pz/Core/Game.hpp src/Pz/Core/Game.cpp
     src/Pz/Core/Logging.hpp src/Pz/Core/Logging.cpp
+    src/Pz/Core/Keyboard.hpp src/Pz/Core/Keyboard.cpp
 
     src/Pz/Mesh/Mesh.hpp src/Pz/Mesh/Mesh.cpp
     src/Pz/Mesh/MeshBuilder.hpp src/Pz/Mesh/MeshBuilder.cpp
