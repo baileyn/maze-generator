@@ -42,10 +42,10 @@ void Mesh::create(const std::vector<Vertex> &vertices, const std::vector<unsigne
     m_indexCount = indices.size();
 }
 
-void Mesh::draw() const
+void Mesh::draw(GLenum mode) const
 {
     glBindVertexArray(m_vao);
-    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+    glDrawElements(mode, m_indexCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }
 

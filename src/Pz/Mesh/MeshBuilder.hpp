@@ -16,6 +16,8 @@ class MeshBuilder
     ~MeshBuilder() = default;
 
     void addVertex(const Vertex &vertex);
+    void addLine(glm::vec2 start, glm::vec2 end, glm::vec3 color = {0.0, 0.0, 0.0});
+
     std::shared_ptr<Mesh> build() const
     {
         // Trace vertices
@@ -31,6 +33,12 @@ class MeshBuilder
         }
 
         return std::make_shared<Mesh>(m_vertices, m_indices);
+    }
+
+    void reset()
+    {
+        m_vertices.clear();
+        m_indices.clear();
     }
 
   private:

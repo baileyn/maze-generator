@@ -22,4 +22,13 @@ void MeshBuilder::addVertex(const Vertex &vertex)
     }
 }
 
+void MeshBuilder::addLine(glm::vec2 start, glm::vec2 end, glm::vec3 color)
+{
+    // Add the start and end vertices to the vertices array
+    // Add the indices of the start and end vertices to the indices array
+
+    addVertex({{start.x, start.y, 0.0f}, color});
+    addVertex({{end.x, end.y, 0.0f}, color});
+}
+
 } // namespace Pz::Mesh

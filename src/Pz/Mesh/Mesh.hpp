@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <memory>
 #include <vector>
 
 namespace Pz::Mesh
@@ -27,7 +28,7 @@ class Mesh
 
     void create(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
 
-    void draw() const;
+    void draw(GLenum mode = GL_TRIANGLES) const;
 
   private:
     Mesh(const Mesh &) = delete;
@@ -42,5 +43,7 @@ class Mesh
 
     size_t m_indexCount = 0;
 };
+
+using MeshPtr = std::shared_ptr<Mesh>;
 
 } // namespace Pz::Mesh

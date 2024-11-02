@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace Pz::Shader
 {
@@ -41,5 +42,7 @@ class Program
   private:
     GLuint m_id;
 };
+
+using ProgramPtr = std::shared_ptr<Program>;
 
 } // namespace Pz::Shader
