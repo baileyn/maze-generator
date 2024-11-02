@@ -6,7 +6,8 @@
 namespace Pz::Core
 {
 
-Game::Game(std::string_view title, int width, int height) : window(title, width, height)
+Game::Game(std::string_view title, int width, int height)
+    : window(title, width, height), m_width(width), m_height(height)
 {
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../UI/Window.hpp"
-#include "Logging.hpp"
 
 #include <glad/glad.h>
 #include <spdlog/cfg/argv.h>
@@ -17,6 +16,17 @@ class Game
     Game(std::string_view title = "Game", int width = 800, int height = 600);
 
     void run();
+
+  protected:
+    float width() const
+    {
+        return m_width;
+    }
+
+    float height() const
+    {
+        return m_height;
+    }
 
   private:
     virtual void init()
@@ -35,6 +45,9 @@ class Game
 
   private:
     Pz::UI::Window window;
+
+    float m_width{};
+    float m_height{};
 };
 
 } // namespace Pz::Core
