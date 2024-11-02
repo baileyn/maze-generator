@@ -12,6 +12,8 @@ set(SOURCE_FILES src/main.cpp
 
     src/Pz/Mesh/Mesh.hpp src/Pz/Mesh/Mesh.cpp
     src/Pz/Mesh/MeshBuilder.hpp src/Pz/Mesh/MeshBuilder.cpp
+
+    src/Pz/Shader/Program.hpp src/Pz/Shader/Program.cpp
 )
 
 add_executable(${PROJECT_NAME})
