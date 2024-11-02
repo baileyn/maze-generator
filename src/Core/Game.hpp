@@ -2,6 +2,7 @@
 
 #include "../UI/Window.hpp"
 
+#include <glad/glad.h>
 #include <string_view>
 
 namespace Pz::Core

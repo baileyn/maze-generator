@@ -1,5 +1,7 @@
 #include "Window.hpp"
 
+#include <glad/glad.h>
+
 namespace Pz::UI
 {
 
@@ -18,6 +20,12 @@ Window::Window(std::string_view title, int width, int height) : m_window(nullptr
     if (!m_window)
     {
         throw std::runtime_error("Failed to create window");
+    }
+
+    glfwMakeContextCurrent(m_window.get());
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+    {
+        throw std::runtime_error("Failed to initialize GLAD");
     }
 }
 
