@@ -14,7 +14,7 @@ class Program
   public:
     Program();
 
-    void addShader(const std::filesystem::path &path, GLenum type);
+    void attachShader(const std::filesystem::path &path, GLenum type);
     void link();
 
     void use()

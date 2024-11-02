@@ -33,7 +33,7 @@ Program::Program()
     m_id = glCreateProgram();
 }
 
-void Program::addShader(const std::filesystem::path &path, GLenum type)
+void Program::attachShader(const std::filesystem::path &path, GLenum type)
 {
     std::string source = readFile(path);
     GLuint shader = glCreateShader(type);
