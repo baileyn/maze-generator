@@ -1,19 +1,17 @@
-#include "UI/Window.hpp"
+#include "Core/Game.hpp"
 
-#include <cstdlib>
-
-// Developmet ONLY should _NOT_ be in the final product.
-#include <GLFW/glfw3.h>
+class ExampleGame : public Pz::Core::Game
+{
+  private:
+    void render() override
+    {
+    }
+};
 
 int main(int argc, char **argv)
 {
-    Pz::UI::Window window("Game", 800, 600);
-
-    while (!window.shouldClose())
-    {
-        glfwPollEvents();
-        window.swapBuffers();
-    }
+    ExampleGame game{};
+    game.run();
 
     return EXIT_SUCCESS;
 }

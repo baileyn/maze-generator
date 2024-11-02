@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES src/main.cpp
     src/UI/Window.hpp src/UI/Window.cpp
+    src/Core/Game.hpp src/Core/Game.cpp
 )
 
 add_executable(${PROJECT_NAME})
