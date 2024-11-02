@@ -5,8 +5,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(SOURCE_FILES src/main.cpp
-    src/UI/Window.hpp src/UI/Window.cpp
-    src/Core/Game.hpp src/Core/Game.cpp
+    src/Pz/UI/Window.hpp src/Pz/UI/Window.cpp
+    src/Pz/Core/Game.hpp src/Pz/Core/Game.cpp
+    src/Pz/Core/Logging.hpp src/Pz/Core/Logging.cpp
 )
 
 add_executable(${PROJECT_NAME})
