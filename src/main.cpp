@@ -260,8 +260,9 @@ class Grid
 class Player
 {
   public:
-    Player(Pz::Mesh::MeshPtr mesh, glm::vec3 position) : m_mesh{mesh}, m_position{position}
+    Player()
     {
+        generateMesh();
     }
 
     void update()
@@ -271,14 +272,27 @@ class Player
     void render(Pz::Shader::ProgramPtr &program)
     {
         program->use();
-        program->setUniform("model", glm::translate(glm::mat4(1.0f), m_position));
+        program->setUniform("model", glm::translate(glm::mat4(1.0f), m_position + glm::vec3{0.25f, 0.25f, 0.0f}));
 
         m_mesh->draw();
     }
 
   private:
+    void generateMesh()
+    {
+        Pz::Mesh::MeshBuilder builder{};
+        builder.addVertex({{0.0f, 0.0f, 0.0f}, {}});
+        builder.addVertex({{0.0f, 0.5f, 0.0f}, {}});
+        builder.addVertex({{0.5f, 0.0f, 0.0f}, {}});
+        builder.addVertex({{0.5f, 0.0f, 0.0f}, {}});
+        builder.addVertex({{0.0f, 0.5f, 0.0f}, {}});
+        builder.addVertex({{0.5f, 0.5f, 0.0f}, {}});
+        m_mesh = builder.build();
+    }
+
+  private:
     Pz::Mesh::MeshPtr m_mesh{};
-    glm::vec3 m_position;
+    glm::vec3 m_position{};
 };
 
 class ExampleGame : public Pz::Core::Game
@@ -292,6 +306,7 @@ class ExampleGame : public Pz::Core::Game
     void init() override
     {
         m_grid.generate();
+        m_player = std::make_shared<Player>();
 
         program = std::make_shared<Pz::Shader::Program>();
         program->attachShader("assets/shaders/simple.vert", GL_VERTEX_SHADER);
@@ -312,6 +327,7 @@ class ExampleGame : public Pz::Core::Game
         glClear(GL_COLOR_BUFFER_BIT);
 
         m_grid.render(program);
+        m_player->render(program);
     }
 
   private:
