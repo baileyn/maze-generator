@@ -9,9 +9,8 @@
 #include <memory>
 #include <random>
 
-constexpr int GRID_SIZE = 20;
-constexpr int WIDTH = 20;
-constexpr int HEIGHT = 20;
+constexpr int WIDTH = 10;
+constexpr int HEIGHT = 10;
 
 enum class Direction : int
 {
@@ -112,7 +111,7 @@ class Grid
 
     void reset()
     {
-        m_start = randomGridPosition();
+        m_start = {}; // randomGridPosition();
         m_end = randomGridPosition();
 
         m_cells.resize(m_width * m_height);
